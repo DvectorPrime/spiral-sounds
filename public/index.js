@@ -42,10 +42,10 @@ function renderProducts(products) {
 async function init() {
   const products = await getProducts()
   renderProducts(products)
-  populateGenreSelect()
+  await populateGenreSelect()
 }
 
-init()
+await init()
 
 // ===== Genre Dropdown =====
 
