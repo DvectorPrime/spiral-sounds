@@ -1,6 +1,13 @@
 import express from 'express'
 import {productRouter} from "./routes/product.js"
 import { authRouter } from './routes/auth.js'
+import { meRouter } from './routes/me.js'
+import session from 'express-session'
+import dotenv from "dotenv"
+
+dotenv.config()
+
+const secret = process.env.SESSION_SECRET
 
 const PORT = 8000
 
@@ -8,9 +15,22 @@ const app = express()
 
 app.use(express.json())
 
+app.use(session({
+  secret: secret,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: false,
+    sameSite: 'lax'
+  },
+}))
+
 app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static('public'))
+
+app.use("/api/auth/me", meRouter)
 
 app.use("/api/auth", authRouter)
 
